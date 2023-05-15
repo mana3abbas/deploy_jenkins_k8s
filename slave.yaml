@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-slave
+  namespace: ns-jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins-slave
+  template:
+    metadata:
+      labels:
+        app: jenkins-slave
+    spec:
+      securityContext:
+            fsGroup: 0
+            runAsUser: 0
+      containers:
+        - name: jenkins-slave
+          image: monasamir/slave
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 22
+          volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run//docker.sock         
+      volumes:
+        - name: docker-sock
+          hostPath: 
+             path: /var/run/docker.sock

@@ -1,0 +1,22 @@
+#Node Port service for the Jenkins Deployment 
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-ser
+  namespace: ns-jenkins
+  annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path:   /
+      prometheus.io/port:   '8080'
+spec:
+  selector: 
+    app: jenkins
+  type: NodePort  
+  ports:
+    - name: httpport
+      port: 8080
+      targetPort: 8080
+      nodePort: 32016
+    - name: jnlpport
+      port: 50000
+      targetPort: 50000
